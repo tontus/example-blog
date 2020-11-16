@@ -22,18 +22,18 @@ class CreateUserForm(UserCreationForm):
         self.fields["password2"].widget.attrs.update(
             {'class': 'form-control', 'data-validation-required-message': "Please confirm your password."})
 
-    # def clean(self):
-    #     email = self.cleaned_data.get('email')
-    #     if User.objects.filter(email=email).exists():
-    #         raise ValidationError("Email exists")
-    #     return self.cleaned_data
-
     def save(self, commit=True):
         user = super().save(False)
-        if User.objects.filter(email=user.email).exists():
-            raise ValidationError("Email exists")
-            return
-        user.username = user.email
+        user.username = user.email.lower()
+        user.email = user.email.lower()
         user = super().save()
-
         return user
+
+    def clean(self):
+        cd = self.cleaned_data
+
+        email = cd.get("email").lower()
+        print(cd)
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Email exists")
+        return cd
