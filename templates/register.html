@@ -14,7 +14,7 @@
         <!-- Content Row -->
         <div class="row">
             <div class="col-lg-4 mb-4">
-                <form name="sentMessage" id="contactForm"  method="post" action="">
+                <form name="sentMessage" id="contactForm" method="post" action="">
                     {% csrf_token %}
                     <div class="control-group form-group">
                         <div class="controls">
@@ -61,9 +61,13 @@
                     </div>
                     <!-- For success/fail messages -->
 
+
                     <button type="submit" class="btn btn-primary" id="login-btn">Register</button>
-{#                    <input type="submit">#}
+                    {#                    <input type="submit">#}
                 </form>
+                <div>
+                    <a href="{% url 'login' %}">Already have an account?</a>
+                </div>
             </div>
         </div>
         <!-- /.row -->

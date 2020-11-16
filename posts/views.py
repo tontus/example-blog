@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 # POSTS VIEW ENDPOINT
 def posts(request):
-    return render(request, 'blog-listing.html')
+    if request.user.is_authenticated:
+        return render(request, 'blog-listing.html')
+    return redirect('login')
 
 
 # POST DETAILS VIEW ENDPOINT

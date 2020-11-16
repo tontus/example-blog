@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import Http404
 from django.shortcuts import render, redirect
 
@@ -14,10 +14,10 @@ def user_login(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            print('hmm')
             return redirect('home')
         else:
-            print('dsfassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
+            messages.error(request, 'Email or password not correct')
+            return redirect('login')
     return render(request, 'login.html')
 
 
@@ -31,3 +31,8 @@ def register(request):
             messages.success(request, 'Account created successfully')
             return redirect('login')
     return render(request, 'register.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect("login")
