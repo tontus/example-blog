@@ -24,16 +24,18 @@ class CreateUserForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(False)
-        user.username = user.email.lower()
-        user.email = user.email.lower()
+        user.username = user.email
         user = super().save()
         return user
 
     def clean(self):
         cd = self.cleaned_data
-
-        email = cd.get("email").lower()
+        email = cd.get("email")
         print(cd)
         if User.objects.filter(email=email).exists():
             raise ValidationError("Email exists")
         return cd
+
+    def clean_email(self):
+        data = self.cleaned_data.get("email").lower()
+        return data

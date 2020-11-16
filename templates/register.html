@@ -54,9 +54,13 @@
                             {{ form.password2 }}
                         </div>
                     </div>
-                    <div id="success"></div>
+                    <div id="success">
+                        {% for key, value in form.errors.items %}
+                            {{ value }}
+                        {% endfor %}
+                    </div>
                     <!-- For success/fail messages -->
-                    {{ form.errors }}
+
                     <button type="submit" class="btn btn-primary" id="login-btn">Register</button>
 {#                    <input type="submit">#}
                 </form>
