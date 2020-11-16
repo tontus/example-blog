@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.core.exceptions import ValidationError
 
 
 class CreateUserForm(UserCreationForm):
@@ -11,12 +12,28 @@ class CreateUserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         self.fields["first_name"].widget.attrs.update(
-            {'class': 'form-control','data-validation-required-message':"Please enter your first name."})
+            {'class': 'form-control', 'data-validation-required-message': "Please enter your first name."})
         self.fields["last_name"].widget.attrs.update(
-            {'class': 'form-control','data-validation-required-message':"Please enter your last name."})
+            {'class': 'form-control', 'data-validation-required-message': "Please enter your last name."})
         self.fields["email"].widget.attrs.update(
-            {'class': 'form-control','data-validation-required-message':"Please enter your email."})
+            {'class': 'form-control', 'data-validation-required-message': "Please enter your email."})
         self.fields["password1"].widget.attrs.update(
-            {'class': 'form-control','data-validation-required-message':"Please enter your password."})
+            {'class': 'form-control', 'data-validation-required-message': "Please enter your password."})
         self.fields["password2"].widget.attrs.update(
-            {'class': 'form-control','data-validation-required-message':"Please confirm your password."})
+            {'class': 'form-control', 'data-validation-required-message': "Please confirm your password."})
+
+    # def clean(self):
+    #     email = self.cleaned_data.get('email')
+    #     if User.objects.filter(email=email).exists():
+    #         raise ValidationError("Email exists")
+    #     return self.cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(False)
+        if User.objects.filter(email=user.email).exists():
+            raise ValidationError("Email exists")
+            return
+        user.username = user.email
+        user = super().save()
+
+        return user

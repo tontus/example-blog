@@ -14,7 +14,8 @@
         <!-- Content Row -->
         <div class="row">
             <div class="col-lg-4 mb-4">
-                <form name="sentMessage" id="contactForm" novalidate>
+                <form name="sentMessage" id="contactForm"  method="post" action="">
+                    {% csrf_token %}
                     <div class="control-group form-group">
                         <div class="controls">
                             <label>First Name*</label>
@@ -55,7 +56,9 @@
                     </div>
                     <div id="success"></div>
                     <!-- For success/fail messages -->
+                    {{ form.errors }}
                     <button type="submit" class="btn btn-primary" id="login-btn">Register</button>
+{#                    <input type="submit">#}
                 </form>
             </div>
         </div>
